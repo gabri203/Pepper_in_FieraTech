@@ -1,0 +1,60 @@
+topic: ~indicazioni_stand()
+language: iti
+
+# Defining extra concepts out of words or group of words
+#concept:(hello) [hello hi hey "good morning" greetings]
+
+# Catching inputs and triggering outputs
+#u:(e:onStart) $onStopped=1
+
+# Replying to speech
+#u:(~hello) ~hello
+
+concept: (affermazione) ["Certo {Pepper grazie}" "Si {Pepper Grazie}" "Va bene {Pepper grazie}" "Okay {Pepper grazie}" "Grazie {Pepper}"]
+
+u:(e:onStart) Posso fornirti tutte le posizioni degli stand e le indicazioni per raggiungerli. $find=1
+#Questo tipo di interazione è dedicata ai visitatori che conoscono già la fiera e i nomi degli stand (anche tramite richieste effettuate in precedenza a Pepper).In questo caso i visitatori vogliono semplicemente ricercare la posizione di uno o più stand e quindi ottenere le indicazioni per raggiungerli.
+u:(e:find) Indicami il nome dello stand o dell'area che vorresti raggiungere.
+    u1:(_[{*}]) $nome=$1
+    #Pepper fornirà le indicazioni per raggiungere lo stand indicato dal visitatore.
+
+#L'evento (e:nome) si attiverà anche nel caso in cui il visitatore dopo aver visualizzato la mappa, per maggiori informazioni sugli stand, confermerà l'intenzione di raggiungere uno degli stand che ha selezionato sulla mappa.
+
+u:($nome=="RoboCore" e:nome) Lo stand Robocore si trova nella zona nord dell'evento, accanto allo stand PrintGenius. $keepfind=1
+   
+u:($nome=="PrintGenius" e:nome) Lo stand PrintGenius si trova nella zona ovest dell'evento. $keepfind=1 
+
+u:($nome=="Evolution" e:nome) Lo stand EVolution si trova nella zona nord-est dell'evento. $keepfind=1
+
+u:($nome=="Augmentia" e:nome) Lo stand Augmentia si trova nella zona centrale dell'evento. $keepfind=1  
+
+u:($nome=="Area Picnic" e:nome) L'Area Picnic si trova nella zona centrale tra l'Area Shop e lo stand Augmentia. $keepfind=1
+
+u:($nome=="Area Pass" e:nome) L' Area Pass e Informazioni si trova all'ingresso principale dell'evento, indicato sulla mappa dall'icona "Biglietto".$keepfind=1
+
+u:($nome=="Pronto Soccorso" e:nome) L'area Pronto Soccorso, si trova nella zona nord dell'evento, vicino allo stand Evolution. $keepfind=1
+
+u:($nome=="Area Shop" e:nome) L'Area Shop si trova nella zona in basso a sinistra dell'evento, indicata dall'icona "shop" sulla mappa. 
+Sul mio tablet puoi visionare alcuni dei prodotti presenti nell'Area Shop. $hidesuit=1 $shop=1
+    u1:(e:quiz) Vorresti partecipare al Pepper Quiz per vincere un buono sconto da utilizzare nell'Area Shop?
+    #Dopo che il visitatore avrà finito di visionare i prodotti (e:quiz),Pepper propone il Pepper Quiz.
+        u2:(~affermazione) $startquiz=1
+        #Nel caso il visitatore accetterà di partecipare si attiverà il dialog Quiz (locato nel box Area Shop).
+        u2:(No {*}) $keepfind=1
+        #Nel caso il visitatore rifiuta gli sarà data la possibilità di continuare a chiedere indicazioni sugli stand.
+    
+    
+u:(e:keepfind) $showsuit=1 Hai bisogno di indicazioni per altri stand?
+#Alla fine di ogni indicazione data da Pepper, il visitatore potrà richiedere indicazioni per altri stand.
+    u1:(~affermazione) $find=1 
+    u1:(No {*}) Vorresti una copia digitale della mappa per non perderti durante la fiera?
+    #Nel caso il visitatore non voglia richiedere altre indicazioni,Pepper offre una copia digitale della mappa tramite QRcode.
+        u2:(~affermazione) $hidesuit=1 $qrcode=1 
+        u2:(["No {*}" e:stopqrmappa]) $showsuit=1 Hai bisogno di ulteriore aiuto?
+        #Nel caso il visitatore non è interessato alla copia digitale della mappa,o successivamente all'acquisizione di essa, gli verrà chiesto se ha             bisogno di ulteriore aiuto.
+            u3:(_[No Si] {*}) ["$foto=1  $1=="No"" "$help=1 $1=="Si""] $onStopped=1
+            #Nel caso il visitatore ha bisogno di ulteriore aiuto,Pepper offrirà nuovamente le funzionalità presentate nel dialog Help ($help=1).
+            #Nel caso il visitatore non ha bisogno di ulteriore aiuto,Pepper gli consiglia di scattare una foto ricordo ($foto=1). 
+    
+
+    

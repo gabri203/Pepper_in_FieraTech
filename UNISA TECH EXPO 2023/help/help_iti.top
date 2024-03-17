@@ -1,0 +1,43 @@
+topic: ~help()
+language: iti
+
+# Defining extra concepts out of words or group of words
+#concept:(hello) [hello hi hey "good morning" greetings]
+
+# Catching inputs and triggering outputs
+#u:(e:onStart) $onStopped=1
+
+# Replying to speech
+#u:(~hello) ~hello
+
+concept: (affermazione) ["Certo {Pepper grazie}" "Si {Pepper Grazie}" "Va bene {Pepper grazie}" "Okay {Pepper grazie}" "Grazie {Pepper}"]
+
+u:(e:onStart) Sono a tua completa disposizione, posso aiutarti nel visualizzare la mappa ,fornirti le indicazioni più rapide e convenienti per raggiungere uno stand o posso consigliarti uno stand in base ai tuoi interessi.
+#Sucessivamente alla validazione del pass, o alla registrazione (per i visitatori non muniti di pass),Pepper offre tutte le sue possibili funzionalità per aiutare il visitatore. In un secondo momento Pepper si può mettere nuovamente a disposizione per ulteriore aiuto se il visitatore lo richiede.
+    u1:({*} _["la mappa" "indicazioni per uno stand" "consigliami uno stand"])
+        ["$1=="la mappa" $mappa=1" "$1=="indicazioni per uno stand" $ricerca=1" "$1=="consigliami uno stand" $consiglio=1"] $onStopped=1
+        #Verrà avviato il dialog più adatto per soddifsfare le esigenze del visitatore.
+        
+u:(e:foto) Prima di salutarci, ti andrebbe di scattare una foto ricordo per questa esperienza?
+    u1:(_[No Si]{*}) ["$feedback=1 $1=="No"" "Guarda nella fotocamera e sorridi $1=="Si" $take=1"] $hidesuit=1 
+        #Nel caso il visitatore accetta di scattare la foto,si attiverà un countdown per l'autoscatto, e la foto sarà mostrata sul tablet.
+        #Altrimenti verrà chiesto al visitatore prima che vada via di compilare un breve sondaggio di feedback sull'assitenza ricevuta da Pepper.
+               
+u:(e:feedback) Prima di salutarci, ricorda che in qualsiasi momento puoi recarti da me se hai bisogno di aiuto, e se puoi lasciaci un veloce feedback tramite un sondaggio che comparirà sul mio tablet. Per lasciare un feedback seleziona l'icona che rappresenta la valutazione che ritieni più giusta $startsondaggio=1 
+#Il feedback sarà mostrato al visitatore in ogni caso.
+
+u:(e:x_feed) ["$y_feed>400 $y_feed<665 $x_feed>163 $x_feed<1173 $check_x=1" "Nessuna valutazione selezionata, riprova a selezionare l'icona correttamente"]
+#Nel caso il visitatore seleziona un punto che non corrisponde a nessuna delle 5 valutazioni rappresentate all'interno del feedback, gli verrà chiesto di riselezionare in modo corretto la valutazione che ritiene più giusta.
+
+u:(e:check_x) ["$x_feed>163 $x_feed<354 $valutazione=1" "$x_feed>354 $x_feed<450 $valutazione=2" "$x_feed>450 $x_feed<746 $valutazione=3" "$x_feed>746 $x_feed<960 $valutazione=4" "$x_feed>960 $x_feed<1173 La tua valutazione è 5 stelle su 5, siamo lieti di sapere che sei rimasto soddisfatto dei nostri servizi $saluto=1"]
+#Riconoscimento della valutazione selezionata dal visitatore, tramite cordinate cartesiane. 
+#Nel caso il visitatore seleziona una valutazione che va da 1 a 4, verrà chiesto un ulteriore feedback (e:valutazione).
+    u1:(e:valutazione) La tua valutazione è $valutazione su 5, come pensi potremmo migliorare l'esperienza del visitatore?
+        u2:(*) Grazie del feedback. $saluto=1
+    
+
+
+
+
+     
+        

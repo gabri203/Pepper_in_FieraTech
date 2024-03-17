@@ -1,0 +1,28 @@
+topic: ~checkin()
+language: iti
+
+# Defining extra concepts out of words or group of words
+#concept:(hello) [hello hi hey "good morning" greetings]
+
+# Catching inputs and triggering outputs
+#u:(e:onStart) $onStopped=1
+
+# Replying to speech
+#u:(~hello) ~hello
+
+concept: (affermazione) ["Certo {Pepper grazie}" "Si {Pepper Grazie}" "Va bene {Pepper grazie}" "Okay {Pepper grazie}" "Grazie {Pepper}"]
+
+u:(e:validpass) ["Il tuo staff pass è valido,sei autorizzato a visitare la fiera $validpass==112 $help=1 $onStopped=1" "Il tuo guest pass è valido,sei autorizzato a visitare la fiera $validpass==108 $help=1 $onStopped=1" "Il tuo pass è scaduto o non valido per questa fiera $registrazione=1"]  
+#Validazione del pass tramite NAOmark con differenzazione tra staff e guest pass, e conseguente accesso a tutte le funzionalità di aiuto di Pepper.
+#Nel caso in cui il visitatore ha un pass non valido o scaduto(NAOmark non presente tra quelli consentiti per l'accesso alla fiera), gli sarà data la possibilità di registrarsi tramite un modulo.  
+
+u:(e:registrazione) Vuoi creare un nuovo guest pass per accedere alla fiera?
+    u1:(~affermazione) Ora ti mostro il modulo da compilare sul mio tablet per registrati alla fiera. $hidesuit=1 $startmodulo=1
+    #Pepper nasconde la sua suit ($hidesuit=1), per mostrare sul tablet il modulo di registrazione.
+        u2:(e:stopmodulo) Grazie,la tua registrazione è andata a buon fine, ora puoi accedere alla fiera. $help=1 $showsuit=1 $onStopped=1
+        #Successivamente alla registrazione,Pepper si metterà a completa disposizione del visitatore ($help=1).
+    u1:(No {Pepper grazie}) Arrivederci e grazie lo stesso di esserci venuto a trovare. $onStopped=1
+    #Nel caso in cui il visitatore non è interessato a registrarsi per visitare la fiera,Pepper lo saluta e lo ringrazia.
+        
+
+

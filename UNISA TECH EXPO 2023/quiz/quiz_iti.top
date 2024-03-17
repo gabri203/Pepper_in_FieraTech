@@ -1,0 +1,41 @@
+topic: ~quiz()
+language: iti
+
+# Defining extra concepts out of words or group of words
+#concept:(hello) [hello hi hey "good morning" greetings]
+
+# Catching inputs and triggering outputs
+#u:(e:onStart) $onStopped=1
+
+# Replying to speech
+#u:(~hello) ~hello
+
+u:(e:onStart) Benvenuto al Pepper Quiz, ti farò alcune domande sugli stand della fiera. Per ogni risposta esatta avrai 1 punto, per ogni risposta errata sarai penalizzato di 1 punto. Puoi scegliere l'argomento tra Robotica,Auto Elettriche, Realtà aumentata e Stampanti 3D.
+
+u:(e:punteggioAttuale) Il punteggio attuale è $punteggioAttuale Scegli il prossimo argomento
+#Dopo ogni domanda a cui risponde il visitatore, gli verra ricordato il suo Punteggio Attuale.
+u:(e:punteggioAttuale $punteggioAttuale==2) Bravissimo hai vinto un buono sconto del 50 percento $sconto=1 
+#Il quiz si blocca a quota 2 punti,e il visitatore riceverà un buono sconto da utilizzare nell'Area Shop
+u:(e:punteggioAttuale $punteggioAttuale==-2) Non sei stato bravo hai perso $onStopped=1 
+#Il quiz si blocca a quota -2 punti, in quanto il visitatore non avrebbe opportunità di recuperare.
+
+
+u:(Robotica) Quale stand si occupa di robotica all'interno della fiera,RoboCore,PrintGenius,Augmentia?
+    u1:(Robocore) Esatto lo stand che si occupa di robotica è Robocore $valore=1 
+    u1:(_[Printginius Augmentia]) Errato lo stand non è $1 $valore=-1
+    u1:(e:Dialog/NotUnderstood) Non ho capito. Puoi ripetere? ^stayInScope
+
+u:(Auto Elettriche) Qual è l'azienda che si occupa di auto elettriche,Augmentia,RoboCore,EVolution?
+    u1:(Evolution) Bravo lo stand che si occupa di auto elettriche è EVolution $valore=1
+    u1:(_[Robocore Augmentia]) Errato lo stand non è $1 $valore=-1 
+    u1:(e:Dialog/NotUnderstood) Non ho capito. Puoi ripetere? ^stayInScope
+
+u:(Realta aumentata) Qual è l'azienda che si occupa di realtà aumentata PrintGenius,Augmentia,EVolution?
+    u1:(Augmentia) Corretto, lo stand che si occupa di realta aumentata è Augmentia $valore=1 
+    u1:(_[Printginius Augmentia Evolution])Sbagliato lo stand non è $1 $valore=-1
+    u1:(e:Dialog/NotUnderstood) Non ho capito. Puoi ripetere? ^stayInScope
+
+u:(Stampanti 3d) Qual è lo stand che si occupa di stampanti 3D,EVolution,PrintGenius,RoboCore?
+    u1:(PrintGinius) Perfetto lo stand che si occupa di stampanti 3d è PrintGenius $valore=1
+    u1:(_[Robocore Evolution Augmentia]) $1 non è lo stand corretto $valore=-1 
+    u1:(e:Dialog/NotUnderstood) Non ho capito. Puoi ripetere? ^stayInScope

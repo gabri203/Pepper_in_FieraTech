@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registrazione visitatore</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Registrazione visitatore</h1>
+		<form action="registrazione.php" method="post">
+			<label for="nome">Nome:</label>
+			<input type="text" id="nome" name="nome" required>
+
+			<label for="cognome">Cognome:</label>
+			<input type="text" id="cognome" name="cognome" required>
+
+			<label for="anno_nascita">Anno di Nascita:</label>
+			<input type="text" id="anno_nascita" name="anno_nascita" required>
+
+			<label for="nazionalita">Nazionalità:</label>
+			<select id="nazionalita" name="nazionalita" required>
+				<option value="">Seleziona la tua nazionalità</option>
+				<option value="italiana">Italiana</option>
+				<option value="francese">Francese</option>
+				<option value="spagnola">Spagnola</option>
+				<option value="tedesca">Tedesca</option>
+				<option value="altro">Altro</option>
+			</select>
+<button type="button">Completa la tua registrazione toccando la mia mano destra</button>
+		</div>
+</body>
+</html>

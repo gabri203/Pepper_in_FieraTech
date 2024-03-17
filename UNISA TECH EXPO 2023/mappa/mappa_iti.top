@@ -1,0 +1,80 @@
+ topic: ~mappa()
+language: iti
+
+# Defining extra concepts out of words or group of words
+#concept:(hello) [hello hi hey "good morning" greetings]
+
+# Catching inputs and triggering outputs
+#u:(e:onStart) $onStopped=1
+
+# Replying to speech
+#u:(~hello) ~hello
+
+concept: (affermazione) ["Certo {Pepper grazie}" "Si {Pepper Grazie}" "Va bene {Pepper grazie}" "Okay {Pepper grazie}" "Grazie {Pepper}"]
+
+u:(e:onStart) Ora ti mostro la mappa sul mio tablet, puoi selezionare uno o più stand o aree in particolare, 
+e ti darò maggiori informazioni a riguardo. Successivamente se vorrai raggiungere lo stand o l'area selezionata tocca la mia mano destra. $hidesuit=1 $viewmap=1 
+
+
+u:(e:x) ["$scelta=RoboCore $x<576 $y<200" "$scelta=PrintGenius $x<320 $y>200 $y<505" "$scelta=EVolution $x>730 $y<320"
+        "$scelta=Augmentia $x>320 $x<730 $y>200 $y<400" "$scelta="Area Picnic" $x>320 $x<730 $y>400 $y<505" 
+        "$scelta="Area Shop" $x<730 $y>505" "$scelta="Area Pass" $x>730 $y>320" "$scelta="Pronto soccorso" $x>576 $x<730 $y<133"] 
+        #Riconoscimento dell'area selezionata dal visitatore sul tablet, tramite cordinate cartesiane.
+       
+u:($scelta=="RoboCore" e:scelta) Hai selezionato RoboCore, uno stand tech che ha l'obiettivo principale di offrire soluzioni di robotizzazione
+    e di automazione avanzate per migliorare l'efficienza dei processi produttivi. Tra i prodotti offerti da RoboCore ci sono i robot 
+    collaborativi, noti anche come cobot, che sono progettati per lavorare a stretto contatto con gli operatori umani. 
+          
+u:($scelta=="PrintGenius" e:scelta) Hai selezionato PrintGenius, uno spazio dedicato alla presentazione delle soluzioni innovative di stampa 3D 
+    che offre  ai visitatori la possibilità di vedere, toccare e interagire con le stampanti 3D. Si ha inoltre la possibilità di realizzare
+    progetti personalizzati che il visitatore può portare a casa come gadget. 
+    
+u:($scelta=="Evolution" e:scelta) Hai selezionato EVolution, uno spazio dedicato alla presentazione di soluzioni innovative di veicoli elettrici
+    e alla sensibilizzazione sulle tematiche legate alla mobilità sostenibile. Il nome "EVolution" rappresenta la trasformazione in corso verso una       
+    mobilità più pulita ed eco-sostenibile, con la "EV" che sta per "Electric Vehicle" e "olution" che sottolinea l'idea di evoluzione.
+    
+u:($scelta=="Augmentia" e:scelta) Hai selezionato Augmentia, uno spazio dedicato alla presentazione di soluzioni innovative di realtà aumentata,
+    in cui il nome gioca sulla parola augment, aumentare, e mentia, mente, suggerendo una connessione tra la tecnologia di realtà aumentata 
+    e la mente  umana, in quanto la tecnologia viene utilizzata per aumentare o migliorare l'esperienza sensoriale del nostro cervello.
+    Inoltre lo stand presenta una tecnologia di realtà virtuale avanzata, che utilizza gli elettrodi muscolari per creare un'esperienza
+    interattiva e immersiva. 
+    
+u:($scelta=="Area Picnic" e:scelta) Hai selezionato l' Area Picnic, uno spazio designato per i visitatori che vogliono rilassarsi,
+    in un'ambientazione tranquilla  e lontana daglii stand e dalle attività della fiera. Inoltre questo spazio può anche offrire un'opportunità 
+    per socializzare con altre persone che partecipano alla fiera, per scambiarsi informazioni e impressioni sull'evento. 
+    
+u:($scelta=="Area Shop" e:scelta) Hai selezionato l'Area Shop, qui potrai comprare il merchandaising personalizzato della fiera, 
+    per portare sempre con te un ricordo di questa esperienza.
+      
+u:($scelta=="Area Pass" e:scelta) Hai selezionato l' Area Pass e Informazioni, uno spazio dedicato all'accoglienza dei visitatori all'interno della      
+    fiera, dove hai convalidato il tuo pass e puoi richiedere informazioni sulla fiera.
+    
+u:($scelta=="Pronto soccorso" e:scelta) Hai selezionato Pronto Soccorso, se sei in pericolo dirigiti di corsa in quest'area e chiama il Servizio
+    Sanitario di  Emergenza Medica. 
+    
+u:(e:indicazioni) $showsuit=1 Sei interessato a raggiungere $scelta ? 
+#Nel caso il visitatore dopo aver chiesto informazioni su uno o più stand, decide di raggiungerne uno in particolare,toccando la mano destra di Pepper,si attiverà (e:indicazioni) che permetterà a Pepper di assicurarsi che lo stand selezionato è quello che il visitatore vuole raggiungere. 
+    u1:(~affermazione) $nome_stand=$scelta 
+    #Si attiverà il dialog per la ricerca degli stand, dove Pepper fornirà le indicazioni per raggiungere lo stand selezionato dal visitatore.
+    u1:(No {*}) Hai bisogno di ulteriore aiuto?
+        u2:(_[No Si] {*}) ["$foto=1  $1=="No"" "$help=1 $1=="Si""] $onStopped=1
+            #Nel caso il visitatore ha bisogno di ulteriore aiuto,Pepper offrirà nuovamente le funzionalità presentate nel dialog Help ($help=1).
+            #Nel caso il visitatore non ha bisogno di ulteriore aiuto,Pepper gli consiglia di scattare una foto ricordo ($foto=1).
+            
+    
+
+    
+    
+    
+    
+    
+                
+        
+        
+    
+    
+
+    
+    
+
+

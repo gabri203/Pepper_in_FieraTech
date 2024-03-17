@@ -1,0 +1,33 @@
+topic: ~consiglio()
+language: iti
+
+# Defining extra concepts out of words or group of words
+#concept:(hello) [hello hi hey "good morning" greetings]
+
+# Catching inputs and triggering outputs
+#u:(e:onStart) $onStopped=1
+
+# Replying to speech
+#u:(~hello) ~hello
+
+concept: (affermazione) ["Certo {Pepper grazie}" "Si {Pepper Grazie}" "Va bene {Pepper grazie}" "Okay {Pepper grazie}" "Grazie {Pepper}"]
+
+u:(e:onStart) Ora cercherò di riconoscere il tuo stato d'animo per consigliarti lo stand più adatto a te. $startidentify=1
+
+u:(e:mood) ["$mood=="happy" $mood=="suprised" $mood=="neutral" $happy=1" "$mood=="sad" $sad=1" "$mood=="angry" $angry=1"]
+#Riconoscimento dello stato d'animo del visitatore, tramite Get Expression.
+
+u:(e:happy) Ti vedo particolarmente felice ti consiglio di raggiungere PrintGenius,la possibilità di liberare la tua creatività realizzando progetti 3D personalizzati che potrari portare a casa come gadget. $raggiungi=PrintGenius
+  
+u:(e:angry) Ti vedo arrabbiato ti consiglio di raggiungere l'Area Picnic un'ambientazione tranquilla e lontana dagli stand e dalle attività della fiera, dove potrai rilassarti e socializzare con altre persone. $raggiungi=Area Picnic
+
+u:(e:sad) Ti vedo triste ti consiglio di raggiungere stand Augmentia, dove potrai vivere un esperienza interattiva e immersiva tramite visori per la realtà aumentata ed elettrodi muscolari. $raggiungi=Augmentia
+
+u:(e:raggiungi) Sei interessato a raggiungere $raggiungi ? 
+#Successivamente al consiglio di Pepper sullo stand più adatto al visitatore (in base al suo stato d'animo) gli verrà chiesto se ha intenzione di raggiungerlo.
+    u1:(~affermazione) $nome_stand2=$raggiungi 
+    #Si attiverà il dialog per la ricerca degli stand, dove Pepper fornirà le indicazioni per raggiungere lo stand che ha consigliato.
+    u1:(No {*}) Hai bisogno di ulteriore aiuto?
+        u2:(_[No Si] {*}) ["$foto=1  $1=="No"" "$help=1 $1=="Si""] $onStopped=1
+            #Nel caso il visitatore ha bisogno di ulteriore aiuto,Pepper offrirà nuovamente le funzionalità presentate nel dialog Help ($help=1).
+            #Nel caso il visitatore non ha bisogno di ulteriore aiuto,Pepper gli consiglia di scattare una foto ricordo ($foto=1).

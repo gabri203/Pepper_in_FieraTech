@@ -1,0 +1,27 @@
+topic: ~Introduzione()
+language: iti
+
+# Defining extra concepts out of words or group of words
+#concept:(hello) [hello hi hey "good morning" greetings]
+
+# Catching inputs and triggering outputs
+#u:(e:onStart) $onStopped=1
+
+# Replying to speech
+#u:(~hello) ~hello
+
+concept: (saluti) ["Ciao {Pepper grazie}" "Buongiorno {Pepper grazie}" "Salve {Pepper grazie}"]
+
+u:(e:onStart) $showsuit=1 Buongiorno e benvenuto all'Unisa Tech Expo 2023! Sono Pepper, il tuo steward personale, 
+e ti accompagnerò durante tutto l'arco della fiera. 
+
+    u1:(~saluti) Per accedere a tutti gli stand e usufruire dei vantaggi offerti dalla fiera, mi dovresti mostrare il tuo pass. $letturapass=1
+    #Avvio della validazione del pass
+    
+
+           
+
+
+
+ 
+
